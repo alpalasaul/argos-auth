@@ -5,13 +5,13 @@ import com.krypton.helmetauth.dao.UserRepository;
 import com.krypton.helmetauth.domain.models.ERole;
 import com.krypton.helmetauth.domain.models.Role;
 import com.krypton.helmetauth.domain.models.User;
+import com.krypton.helmetauth.security.jwt.JwtUtils;
 import com.krypton.helmetauth.services.UserDetailsImpl;
 import com.krypton.helmetauth.web.payload.request.LoginRequest;
 import com.krypton.helmetauth.web.payload.request.SignupRequest;
 import com.krypton.helmetauth.web.payload.response.JwtResponse;
 import com.krypton.helmetauth.web.payload.response.MessageResponse;
-import com.krypton.helmetauth.security.jwt.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,22 +31,14 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder encoder;
+    private final JwtUtils jwtUtils;
 
     @Value("${api.app.jwtExpirationMs}")
     private int jwtExpirationMs;
