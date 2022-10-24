@@ -1,10 +1,21 @@
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { docker { image 'maven:3.8.6-openjdk-11-slim' } }
+    agent { docker { image 'openjdk:11' } }
     stages {
         stage('build') {
             steps {
-                sh 'mvn --version'
+                sh 'java --version'
+                sh './gradlew clean build'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'echo Making test'
+            }
+        }
+        stage('deploy') {
+            steps {
+                sh 'echo Deploy Successfully!'
             }
         }
     }
