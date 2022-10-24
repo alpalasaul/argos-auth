@@ -15,6 +15,8 @@ pipeline {
         }
         stage('deploy') {
             steps {
+                sh 'kubectl config get-contexts'
+                sh 'kubectl get pods'
                 sh 'echo Deploy Successfully!'
             }
         }
