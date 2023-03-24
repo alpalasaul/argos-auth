@@ -1,27 +1,42 @@
 package com.krypton.helmetauth.security.jwt;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+    private final ObjectMapper mapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        logger.error("Error, No autorizado: {}", authException.getMessage());
+
+        String message = (String) request.getSession().getAttribute("messageToken");
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Usuario no autorizado");
-        response.getWriter().flush();
+
+        var res = new HashMap<String, Object>();
+        res.put("status", response.getStatus());
+        res.put("message", message);
+        res.put("error", "unauthorized");
+
+        log.error("Error, No autorizado: {}", authException.getMessage());
+        log.error("Error, token: {}", message);
+
+        mapper.writeValue(response.getOutputStream(), res);
     }
 }

@@ -1,33 +1,22 @@
 package com.krypton.helmetauth.exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+@Getter
+@Setter
 public class BlogAppException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private HttpStatus estado;
+    private HttpStatus status;
     private String mensaje;
 
-    public BlogAppException(HttpStatus estado, String mensaje) {
-        super();
-        this.estado = estado;
+    public BlogAppException(HttpStatus status, String mensaje) {
+        super(mensaje);
+        this.status = status;
         this.mensaje = mensaje;
     }
 
-    public HttpStatus getEstado() {
-        return estado;
-    }
-
-    public void setEstado(HttpStatus estado) {
-        this.estado = estado;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
 }
